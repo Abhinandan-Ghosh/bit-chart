@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import moment from "moment";
 import "./App.css";
 
 function App() {
@@ -15,7 +16,9 @@ function App() {
       }
     );
     Axios.get(
-      `https://api.coindesk.com/v1/bpi/historical/close.json?currency=USD&start=2021-01-01&end=2021-03-30`
+      `https://api.coindesk.com/v1/bpi/historical/close.json?currency=USD&&start=${moment(
+        moment().subtract(60, "days")
+      ).format("YYYY-MM-DD")}&end=${moment().format("YYYY-MM-DD")}`
     ).then((res) => {
       console.log(res.data.bpi);
       setChartData(res.data.bpi);
@@ -25,7 +28,11 @@ function App() {
   const onChangeHandler = (e) => {
     setCurrency(e.target.value);
     Axios.get(
-      `https://api.coindesk.com/v1/bpi/historical/close.json?currency=${e.target.value}&start=2021-01-01&end=2021-03-30`
+      `https://api.coindesk.com/v1/bpi/historical/close.json?currency=${
+        e.target.value
+      }&&start=${moment(moment().subtract(60, "days")).format(
+        "YYYY-MM-DD"
+      )}&end=${moment().format("YYYY-MM-DD")}`
     ).then((res) => {
       // console.log(res);
       setChartData(res.data.bpi);
